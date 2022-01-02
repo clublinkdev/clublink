@@ -34,7 +34,7 @@ Alternative (only use if the above option doesnt work):
 2. By Running: ?list whilst in the console and logged in you can see how many players are online!
 3. By Running: ?leave or ?disconnect you can see how many Tokens & Gems you've earnt in however long your session was! It also disconnects you from MineClub.
 
--- WHAT THE BOT IS USEFUL FOR --
+#### What is ClubLink used for?
 1. Tracking Tokens & Gems
 2. Being able to AFK with a rubbish PC!
 3. Detects missed Private Messages!
