@@ -1,6 +1,11 @@
-# CLUB LINK SETUP TUTORIAL:
+# ClubLink: the future of MineClub.
+With ClubLink, you can track tokens and gems earnt while AFKing without even having to open Minecraft. More features coming soon! Built using Discord.JS, Mineflayer & Typescript.
 
-### Instructions (written for MacOS but should be universal)
+### Dev Team
+- Hannah: Lead Developer (works on ClubLinker)
+- Josh: Developer & Discord Manager (works on ClubLink client)
+
+### Setup Instructions (written for MacOS but should be universal)
 
 #### Downloading
 1. Download the file, unzip it & locate it.
@@ -31,11 +36,8 @@ Alternative (only use if the above option doesnt work):
 
 #### Usage
 1. Typing in console and sending it once logged into the bot will allow you to send messages into MineClub!
-2. By Running: ?list whilst in the console and logged in you can see how many players are online!
-3. By Running: ?leave or ?disconnect you can see how many Tokens & Gems you've earnt in however long your session was! It also disconnects you from MineClub.
-
-#### What is ClubLink used for?
-1. Tracking Tokens & Gems
-2. Being able to AFK with a rubbish PC!
-3. Detects missed Private Messages!
-4. And More!
+2. Run ?list whilst in the console and logged in you can see how many players are online!
+3. Run ?leave or ?disconnect you can see how many Tokens & Gems you've earnt in however long your session was! It also disconnects you from MineClub.
+  
+### Bugs
+Report bugs in our Discord: https://discord.gg/zmc7neES
