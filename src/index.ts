@@ -172,7 +172,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     embeds: [
                         new MessageEmbed({
                             color: embedColor,
-                            title: emojis.CHRISTMAS_TOKEN + " YOU WON" + Number.parseInt(message.replace(/[^0-9]+/g, "")) + "CHRISTMAS TOKEN(S)!",
+                            title: emojis.CHRISTMAS_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " CHRISTMAS TOKEN(S)!",
                             description: `You've now won ${sessionStats.tokens} during this session!`,
                             footer: {
                                 text: footer
