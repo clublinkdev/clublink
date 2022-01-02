@@ -20,6 +20,7 @@ URL = Webhook URL
 AUTH = Microsoft or Mojang (Depending on Minecraft Account)
 EMAIL = Microsoft or Mojang email for Minecraft Account
 PASSWORD = Microsoft or Mojang password for Minecraft Account
+USERID = Discord UserID for the user you're running for
 3. Open the Terminal App and run: cd <Folder Name> (eg. cd dist - this opens my bot folder)
 4. Make sure you have node.js downloaded: https://nodejs.org/en/
 5. Run: npm i (in your terminal) - this downloads all the packages needed for the bot.
