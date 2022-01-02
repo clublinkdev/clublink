@@ -15,7 +15,7 @@ var Minecraft: mineflayer.Bot;
 var Discord: WebhookClient;
 var ChatBridge: readline.Interface = readline.createInterface(process.stdin, process.stdout);
 
-const embedColor = "#2F3136";
+const embedColor = "#ADD8E6";
 
 /**
  * Under our license, you are required to keep this section of code in.
@@ -25,7 +25,7 @@ const embedColor = "#2F3136";
  * work. If you want to take credit, write your own bot. No one likes
  * having their code stolen. Please don't do it to me <3 - Hannah
  */
-const footer = "Powered by ClubLink | A GemDev platform"
+const footer = "Powered by ClubLink | A GemDev Platform"
 
 var sessionStats = {
     gems: 0,
@@ -75,6 +75,11 @@ ConsoleCosmeticLib.startUpSequence(() => {
     console.log(colors.yellow("[@]") + colors.gray(" Connecting to lobby server..."));
     Minecraft.once("spawn", () =>  {
 
+/**
+ * If hoping to run more than 1 account off of your PC, make sure that you change
+ * the port for the Mineflayerviewer so that you can see multiple screens online.
+ */
+
         mineflayerViewer(Minecraft, { port: 4000, firstPerson: false })
         console.log(colors.cyan("[!]") + colors.gray(" Live view is reachable over this connection! Go to http://localhost:4000 to view it. Please note: textures don't work correctly due to some querks with our rendering engine."));
 
@@ -117,6 +122,12 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ChatBridge.prompt();
                     break;
                 case "?leave":
+                    ChatBridge.close();
+                    ChatBridge = readline.createInterface(process.stdin, process.stdout);
+                    Minecraft.end();
+                    console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
+                    ChatBridge.setPrompt("");
+                    ChatBridge.prompt();
                 case "?disconnect":
                     ChatBridge.close();
                     ChatBridge = readline.createInterface(process.stdin, process.stdout);
@@ -134,29 +145,20 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     Minecraft.on("windowOpen", (window) => {
-        if (logGUIData) console.log(colors.red("[$]") + colors.gray(" GUI opened with title \"" + window.title + "\""));
+        if (logGUIData) console.log(colors.cyan("[$]") + colors.gray(" GUI opened with title \"" + window.title + "\""));
     });
 
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
 
-        const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]")
-            .replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "")
-            .replace(Minecraft.username, colors.blue(Minecraft.username))
-            .replace("@everyone", colors.yellow("@everyone"));
+        const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]").replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "").replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone")).replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone"));
 
-        if (formattedMessage.length < 5) {
-            if (logChatData) {
-                ChatBridge.close();
-                ChatBridge = readline.createInterface(process.stdin, process.stdout);
-                console.log(colors.red("[$]") + colors.gray(" The server sent a message which cannot be displayed. This is probably a token or gem given to the player. Check other console output for info."));
-                ChatBridge.setPrompt("");
-                ChatBridge.prompt();
-            }
+        if (formattedMessage.length < 8) {
+            console.log(colors.magenta("[#]") + colors.gray(" Console Message - IGNORE"));
         } else {
-            if (logChatData) {
-                console.log(colors.red("[$]") + colors.gray(" Message sent: ") + colors.red(formattedMessage));
-            }
+            console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
         }
+
+        
 
         if (messagePosition == "system") {
             if (message.match(/[\W]* You won ([0-9]) (\w*) Token[s]?!/g) != null) {
@@ -165,13 +167,13 @@ ConsoleCosmeticLib.startUpSequence(() => {
                 sessionStats.tokens += Number.parseInt(message.replace(/[^0-9]+/g, ""));
                 
                 Discord.send({
-                    username: "ClubLink - " + Minecraft.username,
+                    username: "ClubLink " + "[" + Minecraft.username + "] ",
                     avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
                     embeds: [
                         new MessageEmbed({
                             color: embedColor,
-                            title: emojis.CHRISTMAS_TOKEN + " You earnt Christmas token(s)!",
-                            description: "We suggest you trade these as soon as possible, unobtainable events are ending in March 2022.",
+                            title: emojis.CHRISTMAS_TOKEN + " YOU WON" + Number.parseInt(message.replace(/[^0-9]+/g, "")) + "CHRISTMAS TOKEN(S)!",
+                            description: `You've now won ${sessionStats.tokens} during this session!`,
                             footer: {
                                 text: footer
                             }
@@ -179,20 +181,32 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ],
                 })
 
-                sessionStats.gems += amount;
-                
                 console.log(colors.magenta("[#]") + colors.gray(" Account earned tokens"));
 
             }
 
             if (message.includes("阵")) {
                 sessionStats.gems += 50;
+                Discord.send({
+                    username: "ClubLink " + "[" + Minecraft.username + "] ",
+                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                    embeds: [
+                        new MessageEmbed({
+                            color: embedColor,
+                            title: emojis.GEMS + " YOU EARNT 50 GEMS",
+                            description: `You've now earnt ${sessionStats.gems} during this session!`,
+                            footer: {
+                                text: footer
+                            }
+                        })
+                    ],
+                })
             }
         } else if (messagePosition == "chat") {
             if (message.match(/[\W]+(\w+) -> ME: ([\w\W]+)/g)) {
                 Discord.send({
                     content: `<@${process.env.USERID}> - you got a private message!`,
-                    username: "ClubLink - " + Minecraft.username,
+                    username: "ClubLink " + "[" + Minecraft.username + "] ",
                     avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
                     embeds: [
                         new MessageEmbed({
@@ -205,7 +219,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ],
                 })
                 
-                console.log(colors.magenta("[#]") + colors.gray(" Account recieved private message from " + message.replace(/[\W]+(\w+) -> ME: ([\w\W]+)/g, "$1")));
+                console.log(colors.magenta("[#]") + colors.cyan(" Account recieved private message from " + message.replace(/[\W]+(\w+) -> ME: ([\w\W]+)/g, "$1")));
             }
         }
 
@@ -219,7 +233,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
         if ((message.includes(Minecraft.username)) || (message.includes("@everyone"))) {
             Discord.send({
                 content: `<@${process.env.USERID}>, you were mentioned in public chat!`,
-                username: "ClubLink - " + Minecraft.username,
+                username: "ClubLink " + "[" + Minecraft.username + "] ",
                 avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
                 embeds: [
                     new MessageEmbed({
@@ -232,18 +246,17 @@ ConsoleCosmeticLib.startUpSequence(() => {
                 ],
             })
             
-            console.log(colors.magenta("[#]") + colors.gray(" Account was mentioned in public chat either by username or by use of @everyone"));
+            console.log(colors.magenta("[#]") + colors.cyan(" Account was mentioned in public chat either by username or by use of @everyone"));
         }
 
         if ((message.match(/\bgoodnight\b/g) || message.match(/\bnight\b/g) || message.match(/\bnini\b/g) ||message.match(/\bgn\b/g)) && message.includes(Minecraft.username)) {
             sessionStats.goodnights++;
-            console.log(colors.magenta("[#]") + colors.gray(" Account recieved a goodnight from a player"));
+            console.log(colors.magenta("[#]") + colors.cyan(" Account recieved a goodnight from a player"));
         }
         
     });
 
     Minecraft.on("end", (reason) => {
-        console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
 
         sessionStats.sessionEnd = new Date();
 
@@ -255,18 +268,18 @@ ConsoleCosmeticLib.startUpSequence(() => {
             embeds: [
                 new MessageEmbed({
                     color: embedColor,
-                    title: "Left server",
+                    title: "Disconnected from MineClub!",
                     fields: [
                         {
-                            name: "Session length",
+                            name: "Session Length:",
                             value: formattedDiff
                         },
                         {
-                            name: "Gems earnt",
-                            value: sessionStats.gems + " " + emojis.GEM
+                            name: "Gems Earnt:",
+                            value: sessionStats.gems + " " + emojis.GEMS
                         },
                         {
-                            name: "Tokens earnt",
+                            name: "Tokens Won:",
                             value: sessionStats.tokens + " " + emojis.CHRISTMAS_TOKEN
                         },
                     ],
@@ -276,13 +289,17 @@ ConsoleCosmeticLib.startUpSequence(() => {
                 })
             ],
         })
+    	process.on("SIGINT", () => {
+            console.clear();
+            console.log(colors.red("[-]") + colors.gray(" Process ended"));
+            console.log(colors.bold.gray("Thank you for using ClubLink!"));
+            console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("hanatic (aka Hannah)") + ".\nWe'd like to thank " + colors.bold.magenta("xCrystalz_ (aka Josh)") + " for his work testing the bot and " + colors.bold.red("LostAndDead") + " accidentally for calming Hannah down when she thought her account had been hacked."));
+        })
+	setTimeout(processend,3000)
+	function processend() { 
+    	    console.log(colors.red("Shutting down Clublink...."));
+	    process.exit()
+	}
     });
-
-    process.on("SIGINT", () => {
-        console.clear();
-        console.log(colors.red("[-]") + colors.gray(" Process ended"));
-        console.log(colors.bold.gray("Thank you for using ClubLink!"));
-        console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("hanatic (aka Hannah)") + ".\nWe'd like to thank " + colors.bold.magenta("xCrystalz_ (aka Josh)") + " for his work testing the bot and " + colors.bold.red("LostAndDead") + " accidentally for calming Hannah down when she thought her account had been hacked."));
-    })
 
 });
