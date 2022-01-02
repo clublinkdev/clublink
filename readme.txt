@@ -29,4 +29,15 @@ Alternative (only use if the above option doesnt work):
 2. If the above option DOESNT work, you will need to download TS-Node globally, to do that run: npm i ts-node -g
 3. Then run: ts-node ./src/index.ts --gui --chat
 
+-- HOW TO USE THE BOT --
+1. Typing in console and sending it once logged into the bot will allow you to send messages into MineClub!
+2. By Running: ?list whilst in the console and logged in you can see how many players are online!
+3. By Running: ?leave or ?disconnect you can see how many Tokens & Gems you've earnt in however long your session was! It also disconnects you from MineClub.
+
+-- WHAT THE BOT IS USEFUL FOR --
+1. Tracking Tokens & Gems
+2. Being able to AFK with a rubbish PC!
+3. Detects missed Private Messages!
+4. And More!
+
 WINDOWS:
