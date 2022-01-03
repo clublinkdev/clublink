@@ -2,7 +2,6 @@ import { MessageEmbed, WebhookClient } from "discord.js"
 import { config } from "dotenv";
 import mineflayer from "mineflayer";
 import colors from "colors";
-import { mineflayer as mineflayerViewer } from 'prismarine-viewer';
 import readline from "node:readline";
 import formatDuration from "format-duration";
 
