@@ -1,3 +1,5 @@
+## **Currently broken, use https://github.com/TheMysterys/Mineclub-Link.**
+
 # ClubLink: the future of MineClub.
 With ClubLink, you can track tokens and gems earnt while AFKing without even having to open Minecraft. More features coming soon! Built using Discord.JS, Mineflayer & Typescript.
 
