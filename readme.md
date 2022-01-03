@@ -7,7 +7,7 @@ With ClubLink, you can track tokens and gems earnt while AFKing without even hav
 
 ### Credit
 - TheMysterys for the original concept (https://github.com/TheMysterys/Mineclub-Link)
-- unknownsy and vivi for helping with Title Management
+- unknownsy and vivi for helping with Title Management (which Josh was meant to do)
 
 ### Setup Instructions (written for MacOS but should be universal)
 
