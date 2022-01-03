@@ -74,15 +74,6 @@ ConsoleCosmeticLib.startUpSequence(() => {
     
     console.log(colors.yellow("[@]") + colors.gray(" Connecting to lobby server..."));
     Minecraft.once("spawn", () =>  {
-
-/**
- * If hoping to run more than 1 account off of your PC, make sure that you change
- * the port for the Mineflayerviewer so that you can see multiple screens online.
- */
-
-        mineflayerViewer(Minecraft, { port: 4000, firstPerson: false })
-        console.log(colors.cyan("[!]") + colors.gray(" Live view is reachable over this connection! Go to http://localhost:4000 to view it. Please note: textures don't work correctly due to some querks with our rendering engine."));
-
         playerData.UUID = Minecraft.player.uuid;
         Minecraft.acceptResourcePack();
 
