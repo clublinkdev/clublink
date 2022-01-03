@@ -250,6 +250,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
 	    
         if (reason === "{\"text\":\"You seem to be logged in already. Try again later!\"}") {
             console.log(colors.red("[-]") + colors.gray(" Account lost connection to the server. This is because it's already connected to MineClub. If you frequently restart this process, open your task manager to ensure you haven't got a " + colors.bold.red("'phantom process'") + " open by accident. Otherwise, make sure your Java Edition account isn't connected in any windows. If this doesn't solve your issue, change your account credentials immediately."));
+	    Minecraft.connect(options);
         }  else {
 	    console.log(colors.red("[-]") + colors.gray(" Kicked from server for reason \"" + reason + "\""));
 	    
