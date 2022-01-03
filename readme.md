@@ -45,4 +45,4 @@ Alternative (only use if the above option doesnt work):
 3. Run ?leave or ?disconnect you can see how many Tokens & Gems you've earnt in however long your session was! It also disconnects you from MineClub.
   
 ### Bugs
-Report bugs in our Discord: https://discord.gg/zmc7neES
+Report bugs in our Discord: https://discord.com/invite/G3XyxRCd3v
