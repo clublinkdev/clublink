@@ -247,48 +247,54 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     Minecraft.on("end", (reason) => {
+	    
+        if (reason === "{\"text\":\"You seem to be logged in already. Try again later!\"}") {
+            console.log(colors.red("[-]") + colors.gray(" Account lost connection to the server. This is because it's already connected to MineClub. If you frequently restart this process, open your task manager to ensure you haven't got a " + colors.bold.red("'phantom process'") + " open by accident. Otherwise, make sure your Java Edition account isn't connected in any windows. If this doesn't solve your issue, change your account credentials immediately."));
+        }  else {
+	    console.log(colors.red("[-]") + colors.gray(" Kicked from server for reason \"" + reason + "\""));
+	    
+	    sessionStats.sessionEnd = new Date();
 
-        sessionStats.sessionEnd = new Date();
+	    var formattedDiff = formatDuration(sessionStats.sessionEnd.valueOf() - sessionStats.sessionStart.valueOf());
 
-        var formattedDiff = formatDuration(sessionStats.sessionEnd.valueOf() - sessionStats.sessionStart.valueOf());
-
-        Discord.send({
-            username: "ClubLink - " + Minecraft.username,
-            avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-            embeds: [
-                new MessageEmbed({
-                    color: embedColor,
-                    title: "Disconnected from MineClub!",
-                    fields: [
-                        {
-                            name: "Session Length:",
-                            value: formattedDiff
-                        },
-                        {
-                            name: "Gems Earnt:",
-                            value: sessionStats.gems + " " + emojis.GEMS
-                        },
-                        {
-                            name: "Tokens Won:",
-                            value: sessionStats.tokens + " " + emojis.CHRISTMAS_TOKEN
-                        },
-                    ],
-                    footer: {
-                        text: footer
-                    }
-                })
-            ],
-        })
-    	process.on("SIGINT", () => {
-            console.clear();
-            console.log(colors.red("[-]") + colors.gray(" Process ended"));
-            console.log(colors.bold.gray("Thank you for using ClubLink!"));
-            console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("hanatic (aka Hannah)") + ".\nWe'd like to thank " + colors.bold.magenta("xCrystalz_ (aka Josh)") + " for his work testing the bot and " + colors.bold.red("LostAndDead") + " accidentally for calming Hannah down when she thought her account had been hacked."));
-        })
-	setTimeout(processend,3000)
-	function processend() { 
-    	    console.log(colors.red("Shutting down Clublink...."));
-	    process.exit()
+	    Discord.send({
+	        username: "ClubLink - " + Minecraft.username,
+	        avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+	        embeds: [
+		    new MessageEmbed({
+		        color: embedColor,
+		        title: "Disconnected from MineClub!",
+		        fields: [
+		  	    {
+	   		        name: "Session Length:",
+			        value: formattedDiff
+			    },
+			    {
+			        name: "Gems Earnt:",
+			        value: sessionStats.gems + " " + emojis.GEMS
+			    },
+			    {
+			        name: "Tokens Won:",
+			        value: sessionStats.tokens + " " + emojis.CHRISTMAS_TOKEN
+			    },
+		        ],
+		        footer: {
+			    text: footer
+		        }
+		     })
+	        ],
+	    })
+	    process.on("SIGINT", () => {
+	        console.clear();
+	        console.log(colors.red("[-]") + colors.gray(" Process ended"));
+	        console.log(colors.bold.gray("Thank you for using ClubLink!"));
+	        console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("hanatic (aka Hannah)") + ".\nWe'd like to thank " + colors.bold.magenta("xCrystalz_ (aka Josh)") + " for his work testing the bot and " + colors.bold.red("LostAndDead") + " accidentally for calming Hannah down when she thought her account had been hacked."));
+	    })
+	     setTimeout(processend,3000)
+	    function processend() { 
+	        console.log(colors.red("Shutting down Clublink...."));
+	        process.exit()
+	    }
 	}
     });
 
