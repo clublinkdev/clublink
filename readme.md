@@ -21,14 +21,14 @@ You will need Node.JS 16 or above. Install it from https://nodejs.org/en.
 4. In the folder, create a file called `.env`. Add the following **without quotation marks**:
 ```
 URL=<Add your webhook URL here>
-AUTH=<Either microsoft or mojang, depending on whether your account is migrated>
+AUTH=<Either microsoft or mojang, depending on whether your account is migrated - make sure lowercase>
 EMAIL=<Your account email>
 PASSWORD=<Your account password>
 ```
 6. Finally, run `ts-node ./src/index.ts`
 
 #### Common Bugs
-If it says "Shutting down ClubLink", we apologise. This means your computer might not be compatible with ClubLink. Use https://github.com/TheMysterys/Mineclub-Link instead.
+If it says "Shutting down ClubLink", or doesn't work after Connecting to lobby this means that something in your .env file is wrong. This is most likely the AUTH section. Make sure that Microsoft or Mojang is ALL lowercase.
 
 #### Flags
 If you want to view chat messages & send them, add the `--chat` flag to the end of the command.
