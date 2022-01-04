@@ -291,11 +291,6 @@ ConsoleCosmeticLib.startUpSequence(() => {
 	        console.log(colors.bold.gray("Thank you for using ClubLink!"));
 	        console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("hanatic (aka Hannah)") + ".\nWe'd like to thank " + colors.bold.magenta("xCrystalz_ (aka Josh)") + " for his work testing the bot and " + colors.bold.red("LostAndDead") + " accidentally for calming Hannah down when she thought her account had been hacked."));
 	    })
-	     setTimeout(processend,3000)
-	    function processend() { 
-	        console.log(colors.red("Shutting down Clublink...."));
-	        process.exit()
-	    }
 	}
     });
 
