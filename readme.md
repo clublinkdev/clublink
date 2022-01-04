@@ -27,6 +27,9 @@ PASSWORD=<Your account password>
 ```
 6. Finally, run `ts-node ./src/index.ts`
 
+#### Common Bugs
+If it says "Shutting down ClubLink", we apologise. This means your computer might not be compatible with ClubLink. Use https://github.com/TheMysterys/Mineclub-Link instead.
+
 #### Flags
 If you want to view chat messages & send them, add the `--chat` flag to the end of the command.
 If you want to view data about GUIs that are opened, add the `--gui` flag to the end of the command.
