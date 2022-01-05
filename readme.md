@@ -20,7 +20,7 @@ You will need Node.JS 16 or above. Install it from https://nodejs.org/en.
 3. Then run `npm i -g typescript ts-node`
 4. In the folder, there is a file called `.env`. Open it & add the following **without quotation marks**:
 ```
-URL=<Add your webhook URL here>
+URL=<Add your webhook URL here - you can create one in our Discord in #sessions automatically if you want>
 AUTH=<Either microsoft or mojang, depending on whether your account is migrated - make sure lowercase>
 EMAIL=<Your account email>
 PASSWORD=<Your account password>
