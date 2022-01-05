@@ -27,9 +27,6 @@ PASSWORD=<Your account password>
 ```
 6. Finally, run `ts-node ./src/index.ts`
 
-#### Common Bugs
-If it says "Shutting down ClubLink", or doesn't work after Connecting to lobby this means that something in your .env file is wrong. This is most likely the AUTH section. Make sure that Microsoft or Mojang is ALL lowercase.
-
 #### Flags
 If you want to view chat messages & send them, add the `--chat` flag to the end of the command.
 If you want to view data about GUIs that are opened, add the `--gui` flag to the end of the command.
