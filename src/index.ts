@@ -2,6 +2,7 @@ import { MessageEmbed, WebhookClient } from "discord.js"
 import { config } from "dotenv";
 import mineflayer from "mineflayer";
 import colors from "colors";
+import { mineflayer as mineflayerViewer } from 'prismarine-viewer';
 import readline from "node:readline";
 import formatDuration from "format-duration";
 
@@ -73,6 +74,10 @@ ConsoleCosmeticLib.startUpSequence(() => {
     
     console.log(colors.yellow("[@]") + colors.gray(" Connecting to lobby server..."));
     Minecraft.once("spawn", () =>  {
+
+        mineflayerViewer(Minecraft, { port: 4000, firstPerson: false })
+        console.log(colors.cyan("[!]") + colors.gray(" Live view is reachable over this connection! Go to http://localhost:4000 to view it. Please note: textures don't work correctly due to some querks with our rendering engine."));
+
         playerData.UUID = Minecraft.player.uuid;
         Minecraft.acceptResourcePack();
 
@@ -125,10 +130,39 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
                     ChatBridge.setPrompt("");
                     ChatBridge.prompt();
+		case "?stats":
+                    ChatBridge.close();
+                    ChatBridge = readline.createInterface(process.stdin, process.stdout);
+                    console.log(colors.magenta("[*]") + colors.gray(` You have won ${sessionStats.tokens} tokens and ${sessionStats.gems} gems during this session!`));
+                    ChatBridge.setPrompt("");
+                    ChatBridge.prompt();
+                    break;
             }
-        } else if (input.startsWith("/")) {
-            Minecraft.tabComplete(input, () => null, true)
-        } else {
+        } else if (input.startsWith("/home")) {
+	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	} else if (input.startsWith("/afk")) {
+	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	} else if (input.startsWith("/stafflounge")) {
+	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	} else if (input.startsWith("/hub")) {
+	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	} else if (input.startsWith("/")) {
+            Minecraft.chat(input);
+            Discord.send({
+                username: "ClubLink " + "[" + Minecraft.username + "] ",
+                avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                embeds: [
+                    new MessageEmbed({
+                        color: embedColor,
+                        title: "USED COMMAND!",
+                        description: `You have just ran a command via the panel.`,
+                        footer: {
+                            text: footer
+                        }
+                    })
+                ],
+            })
+	} else {
             Minecraft.chat(input);
         }
 
@@ -247,50 +281,48 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     Minecraft.on("end", (reason) => {
-	    
-        if (reason === "{\"text\":\"You seem to be logged in already. Try again later!\"}") {
-            console.log(colors.red("[-]") + colors.gray(" Account lost connection to the server. This is because it's already connected to MineClub. If you frequently restart this process, open your task manager to ensure you haven't got a " + colors.bold.red("'phantom process'") + " open by accident. Otherwise, make sure your Java Edition account isn't connected in any windows. If this doesn't solve your issue, change your account credentials immediately."));
-	    Minecraft.connect(options);
-        }  else {
-	    console.log(colors.red("[-]") + colors.gray(" Kicked from server for reason \"" + reason + "\""));
-	    
-	    sessionStats.sessionEnd = new Date();
 
-	    var formattedDiff = formatDuration(sessionStats.sessionEnd.valueOf() - sessionStats.sessionStart.valueOf());
+        sessionStats.sessionEnd = new Date();
 
-	    Discord.send({
-	        username: "ClubLink - " + Minecraft.username,
-	        avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-	        embeds: [
-		    new MessageEmbed({
-		        color: embedColor,
-		        title: "Disconnected from MineClub!",
-		        fields: [
-		  	    {
-	   		        name: "Session Length:",
-			        value: formattedDiff
-			    },
-			    {
-			        name: "Gems Earnt:",
-			        value: sessionStats.gems + " " + emojis.GEMS
-			    },
-			    {
-			        name: "Tokens Won:",
-			        value: sessionStats.tokens + " " + emojis.CHRISTMAS_TOKEN
-			    },
-		        ],
-		        footer: {
-			    text: footer
-		        }
-		     })
-	        ],
-	    })
-	    process.on("SIGINT", () => {
-	        console.clear();
-	        console.log(colors.red("[-]") + colors.gray(" Process ended"));
-	        console.log(colors.bold.gray("Thank you for using ClubLink!"));
-	        console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("hanatic (aka Hannah)") + ".\nWe'd like to thank " + colors.bold.magenta("xCrystalz_ (aka Josh)") + " for his work testing the bot and " + colors.bold.red("LostAndDead") + " accidentally for calming Hannah down when she thought her account had been hacked."));
-	    })
+        var formattedDiff = formatDuration(sessionStats.sessionEnd.valueOf() - sessionStats.sessionStart.valueOf());
+
+        Discord.send({
+            username: "ClubLink - " + Minecraft.username,
+            avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+            embeds: [
+                new MessageEmbed({
+                    color: embedColor,
+                    title: "Disconnected from MineClub!",
+                    fields: [
+                        {
+                            name: "Session Length:",
+                            value: formattedDiff
+                        },
+                        {
+                            name: "Gems Earnt:",
+                            value: sessionStats.gems + " " + emojis.GEMS
+                        },
+                        {
+                            name: "Tokens Won:",
+                            value: sessionStats.tokens + " " + emojis.CHRISTMAS_TOKEN
+                        },
+                    ],
+                    footer: {
+                        text: footer
+                    }
+                })
+            ],
+        })
+    	process.on("SIGINT", () => {
+            console.clear();
+            console.log(colors.red("[-]") + colors.gray(" Process ended"));
+            console.log(colors.bold.gray("Thank you for using ClubLink!"));
+            console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("hanatic (aka Hannah)") + ".\nWe'd like to thank " + colors.bold.magenta("xCrystalz_ (aka Josh)") + " for his work testing the bot and " + colors.bold.red("LostAndDead") + " accidentally for calming Hannah down when she thought her account had been hacked."));
+        })
+	setTimeout(processend,3000)
+	function processend() { 
+    	    console.log(colors.red("Shutting down Clublink...."));
+	    process.exit()
 	}
     });
 
