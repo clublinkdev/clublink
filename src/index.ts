@@ -2,7 +2,6 @@ import { MessageEmbed, WebhookClient } from "discord.js"
 import { config } from "dotenv";
 import mineflayer from "mineflayer";
 import colors from "colors";
-import { mineflayer as mineflayerViewer } from 'prismarine-viewer';
 import readline from "node:readline";
 import formatDuration from "format-duration";
 
@@ -74,9 +73,6 @@ ConsoleCosmeticLib.startUpSequence(() => {
     
     console.log(colors.yellow("[@]") + colors.gray(" Connecting to lobby server..."));
     Minecraft.once("spawn", () =>  {
-
-        mineflayerViewer(Minecraft, { port: 4000, firstPerson: false })
-        console.log(colors.cyan("[!]") + colors.gray(" Live view is reachable over this connection! Go to http://localhost:4000 to view it. Please note: textures don't work correctly due to some querks with our rendering engine."));
 
         playerData.UUID = Minecraft.player.uuid;
         Minecraft.acceptResourcePack();
