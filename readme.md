@@ -18,12 +18,13 @@ You will need Node.JS 16 or above. Install it from https://nodejs.org/en.
 1. Clone or download the source code. It will be a folder which might contain a second one inside called "clublink-main"
 2. Open the folder and run `npm i` in a terminal to install the needed packages.
 3. Then run `npm i -g typescript ts-node`
-4. In the folder, create a file called `.env`. Add the following **without quotation marks**:
+4. In the folder, there is a file called `.env`. Open it & add the following **without quotation marks**:
 ```
 URL=<Add your webhook URL here>
 AUTH=<Either microsoft or mojang, depending on whether your account is migrated - make sure lowercase>
 EMAIL=<Your account email>
 PASSWORD=<Your account password>
+USERID=<Your Discord user ID>
 ```
 6. Finally, run `ts-node ./src/index.ts`
 
