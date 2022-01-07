@@ -221,7 +221,8 @@ ConsoleCosmeticLib.startUpSequence(() => {
             }
 	        else if (message.includes("Purchase")) {
                 sessionStats.purchases += 1;
-		        Minecraft.chat("GG (From ClubLink)");
+		        Minecraft.chat("GG");
+			//e
                 Discord.send({
                     username: "ClubLink " + "[" + Minecraft.username + "] ",
                     avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
