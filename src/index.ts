@@ -27,11 +27,21 @@ const embedColor = "#ADD8E6";
 const footer = "Powered by ClubLink | A GemDev Platform"
 
 var sessionStats = {
-    gems: 0,
-    tokens: 0,
+    // Session Time Stats
     sessionStart: new Date(),
     sessionEnd: new Date(),
-    goodnights: 0
+    // Tokens
+    totalTokens: 0,
+    tokenMessages: 0,
+    totalTimesWon: 0,
+    // Gems
+    totalGems: 0,
+    activityGems: 0,
+    marketGems: 0,
+    // Extra
+    goodnights: 0,
+    purchases: 0,
+    pings: 0
 };
 
 var playerData = {
@@ -105,13 +115,6 @@ ConsoleCosmeticLib.startUpSequence(() => {
         
         if (input.startsWith("?")) {
             switch (input) {
-                case "?list":
-                    ChatBridge.close();
-                    ChatBridge = readline.createInterface(process.stdin, process.stdout);
-                    console.log(colors.magenta("[*]") + colors.gray(` There are currently ${Object.keys(Minecraft.players).length} players online.`));
-                    ChatBridge.setPrompt("");
-                    ChatBridge.prompt();
-                    break;
                 case "?leave":
                     ChatBridge.close();
                     ChatBridge = readline.createInterface(process.stdin, process.stdout);
@@ -126,13 +129,6 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
                     ChatBridge.setPrompt("");
                     ChatBridge.prompt();
-		case "?stats":
-                    ChatBridge.close();
-                    ChatBridge = readline.createInterface(process.stdin, process.stdout);
-                    console.log(colors.magenta("[*]") + colors.gray(` You have won ${sessionStats.tokens} tokens and ${sessionStats.gems} gems during this session!`));
-                    ChatBridge.setPrompt("");
-                    ChatBridge.prompt();
-                    break;
             }
         } else if (input.startsWith("/home")) {
 	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
@@ -183,8 +179,9 @@ ConsoleCosmeticLib.startUpSequence(() => {
         if (messagePosition == "system") {
             if (message.match(/[\W]* You won ([0-9]) (\w*) Token[s]?!/g) != null) {
                 let amount = Number.parseInt(message.replace(/[^0-9]+/, "")) 
-
-                sessionStats.tokens += Number.parseInt(message.replace(/[^0-9]+/g, ""));
+		
+		        sessionStats.totalTimesWon += 1;
+                sessionStats.totalTokens += Number.parseInt(message.replace(/[^0-9]+/g, ""));
                 
                 Discord.send({
                     username: "ClubLink " + "[" + Minecraft.username + "] ",
@@ -193,7 +190,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         new MessageEmbed({
                             color: embedColor,
                             title: emojis.CHRISTMAS_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " CHRISTMAS TOKEN(S)!",
-                            description: `You've now won ${sessionStats.tokens} during this session!`,
+                            description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
                             footer: {
                                 text: footer
                             }
@@ -204,9 +201,9 @@ ConsoleCosmeticLib.startUpSequence(() => {
                 console.log(colors.magenta("[#]") + colors.gray(" Account earned tokens"));
 
             }
-
             if (message.includes("阵")) {
-                sessionStats.gems += 50;
+                sessionStats.totalGems += 50;
+		        sessionStats.activityGems += 50;
                 Discord.send({
                     username: "ClubLink " + "[" + Minecraft.username + "] ",
                     avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
@@ -214,7 +211,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         new MessageEmbed({
                             color: embedColor,
                             title: emojis.GEMS + " YOU EARNT 50 GEMS",
-                            description: `You've now earnt ${sessionStats.gems} during this session!`,
+                            description: `You've now earnt ${sessionStats.totalGems} in total during this session!`,
                             footer: {
                                 text: footer
                             }
@@ -222,7 +219,63 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ],
                 })
             }
-        } else if (messagePosition == "chat") {
+	        else if (message.includes("Purchase")) {
+                sessionStats.purchases += 1;
+		        Minecraft.chat("GG (From ClubLink)");
+                Discord.send({
+                    username: "ClubLink " + "[" + Minecraft.username + "] ",
+                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                    embeds: [
+                        new MessageEmbed({
+                            color: embedColor,
+                            title: "STORE PURCHASE",
+                            description: `There have now been ${sessionStats.purchases} during this session!`,
+                            footer: {
+                                text: footer
+                            }
+                        })
+                    ],
+                })
+            }
+	        else if (message.includes("這")) {
+                    Discord.send({
+                        username: "ClubLink " + "[" + Minecraft.username + "] ",
+                        avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                        embeds: [
+                        new MessageEmbed({
+                            color: embedColor,
+                            title: "MARKET - SELL",
+                            description: `You sold an item which you had on the market!`!,
+                            footer: {
+                                text: footer
+                            }
+                        })
+                    ],
+                })
+            }
+	        else if (message.includes("ꌄ[Market] You have been outbid by")) {
+                let username = message.replace(/[\W]+\[Market\] You have been outbid by [\W]+([\w]+) ([0-9,]+)[\W]+/g, "$1");
+                let amount = Number.parseInt(message.replace(/[\W]+\[Market\] You have been outbid by [\W]+([\w]+) ([0-9,]+)[\W]+/g, "$2").replace(",", ""));
+                Discord.send({
+                    username: "ClubLink " + "[" + Minecraft.username + "] ",
+                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                    embeds: [
+                        new MessageEmbed({
+                            color: embedColor,
+                            title: "MARKET - OUTBID",
+                            description: `You were outbid on the market! \n Outbid by: ${username}, New Price: ${amount}`,
+                            footer: {
+                                text: footer
+                            }
+                        })
+                    ],
+                })
+            }
+	        else if (message.includes("鳠")) {
+                sessionStats.tokenMessages += 1;
+            }
+
+    } else if (messagePosition == "chat") {
             if (message.match(/[\W]+(\w+) -> ME: ([\w\W]+)/g)) {
                 Discord.send({
                     content: `<@${process.env.USERID}> - you got a private message!`,
@@ -251,6 +304,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
         }
 
         if ((message.includes(Minecraft.username)) || (message.includes("@everyone"))) {
+            sessionStats.pings += 1
             Discord.send({
                 content: `<@${process.env.USERID}>, you were mentioned in public chat!`,
                 username: "ClubLink " + "[" + Minecraft.username + "] ",
@@ -270,7 +324,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
         }
 
         if ((message.match(/\bgoodnight\b/g) || message.match(/\bnight\b/g) || message.match(/\bnini\b/g) ||message.match(/\bgn\b/g)) && message.includes(Minecraft.username)) {
-            sessionStats.goodnights++;
+            sessionStats.goodnights += 1;
             console.log(colors.magenta("[#]") + colors.cyan(" Account recieved a goodnight from a player"));
         }
         
@@ -288,20 +342,24 @@ ConsoleCosmeticLib.startUpSequence(() => {
             embeds: [
                 new MessageEmbed({
                     color: embedColor,
-                    title: "Disconnected from MineClub!",
+                    title: "**Disconnected from MineClub!**",
                     fields: [
                         {
-                            name: "Session Length:",
+                            name: "**Session Length:**",
                             value: formattedDiff
                         },
                         {
-                            name: "Gems Earnt:",
-                            value: sessionStats.gems + " " + emojis.GEMS
+                            name: "**Gems Earnt:**",
+                            value: sessionStats.totalGems + emojis.GEMS + " Total \n" + sessionStats.activityGems + emojis.GEMS + " From Activity \n" + sessionStats.marketGems + emojis.GEMS + " From Market"
                         },
                         {
-                            name: "Tokens Won:",
-                            value: sessionStats.tokens + " " + emojis.CHRISTMAS_TOKEN
+                            name: "**Tokens Won:**",
+                            value: sessionStats.totalTokens + emojis.CHRISTMAS_TOKEN + " Total \n" + sessionStats.totalTimesWon + "/" + sessionStats.tokenMessages + " total times"
                         },
+			{
+			    name: "**Extra:**",
+			    value: "**Total Goodnights:** " + sessionStats.goodnights + "\n" + "**Total Pings:**" + sessionStats.pings + "\n" + "**Total Purchases:** " + sessionStats.purchases
+			},
                     ],
                     footer: {
                         text: footer
