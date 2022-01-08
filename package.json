@@ -15,7 +15,8 @@
     "path": "^0.12.7",
     "prismarine-viewer": "^1.21.0",
     "shell": "^0.8.6",
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.8.5",
+    "ts-node": "^10.4.0"
   },
   "name": "clublink",
   "version": "0.3.5",

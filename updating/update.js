@@ -8,13 +8,14 @@ const directory = "src";
 var srcExists;
 var needsUpdate;
 const fileName = "updating/version";
-const versionRawLink = "https://raw.githubusercontent.com/clublinkdev/clublink/main/updating/version";
 
 
 fs.access(directory, function(error) {
     if (error) {
         console.log("cant find src");
         srcExists = false;
+        downloadFiles();
+        moveFolder();
         checkVersion();
     } else {
         console.log("Directory exists.");
@@ -48,7 +49,6 @@ function updateSequence() {
 
 function moveFolder() {
     fse.rename("updating/clublink/src", directory, function(err) {
-        if (err) throw err
         console.log('Successfully moved!')
     })
     fse.removeSync("updating/clublink");
@@ -69,7 +69,7 @@ function srcCheck() {
 async function checkVersion() {
     var clientVersion = fs.readFileSync(fileName, 'utf8');
     var currentVersion;
-    const response = await fetch(versionRawLink);
+    const response = await fetch("https://raw.githubusercontent.com/xploree/clublink/main/updating/version.txt");
     const data = await response.text();
     console.log(data);
     console.log(clientVersion);
