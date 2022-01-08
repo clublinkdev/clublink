@@ -221,7 +221,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ],
                 })
             }
-	        else if (message.includes("Purchase") && shouldSendGG == true) {
+	        else if (message.includes("Purchase") && shouldSendGG) {
                 sessionStats.purchases += 1;
 		Minecraft.chat("GG");
                 Discord.send({
