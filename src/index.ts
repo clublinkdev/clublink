@@ -276,7 +276,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         new MessageEmbed({
                             color: embedColor,
                             title: emojis.GEMS + " YOU EARNT 50 GEMS",
-                            description: `You've now earnt ${sessionStats.totalGems}` + emojis.GEMS + ` in total during this session! \n Activity Gems: ${sessionStats.activityGems}` + emojis.GEMS + `\n Market Gems: ${sessionStats.marketGems}` + emojis.GEMS,
+                            description: `You've now earnt ${sessionStats.totalGems}` + emojis.GEMS + ` in total during this session! \n \n **Activity Gems:** ${sessionStats.activityGems}` + emojis.GEMS + `\n **Market Gems:** ${sessionStats.marketGems}` + emojis.GEMS,
                             footer: {
                                 text: footer
                             }
