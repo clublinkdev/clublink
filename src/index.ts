@@ -33,7 +33,7 @@ var sessionStats = {
     totalTokens: 0,
     tokenMessages: 0,
     totalTimesWon: 0,
-    spinAmount: 1,
+    spinAmount: 0,
     // Gems
     totalGems: 0,
     activityGems: 0,
