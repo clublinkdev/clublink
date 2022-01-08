@@ -216,7 +216,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     embeds: [
                         new MessageEmbed({
                             color: embedColor,
-                            title: emojis.CHRISTMAS_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " CHRISTMAS TOKEN(S)!",
+                            title: emojis.ANNIVERSARY_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " ANNIVERSARY TOKEN(S)!",
                             description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
                             footer: {
                                 text: footer
@@ -248,7 +248,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
             }
 	        else if (message.includes("Purchase")) {
                 sessionStats.purchases += 1;
-		        Minecraft.chat("GG (From ClubLink)");
+		        Minecraft.chat("GG");
                 Discord.send({
                     username: "ClubLink " + "[" + Minecraft.username + "] ",
                     avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
