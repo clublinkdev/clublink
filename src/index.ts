@@ -145,6 +145,8 @@ ConsoleCosmeticLib.startUpSequence(() => {
 	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
 	} else if (input.startsWith("/hub")) {
 	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	} else if (input.startsWith("/tpa") {
+	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));		   
 	} else if (input.startsWith("/")) {
             Minecraft.chat(input);
             Discord.send({
@@ -153,8 +155,8 @@ ConsoleCosmeticLib.startUpSequence(() => {
                 embeds: [
                     new MessageEmbed({
                         color: embedColor,
-                        title: "USED COMMAND!",
-                        description: `You have just ran a command via the panel.`,
+                        title: "Used command `" + input + "`!",
+                        description: `You have just ran a command via console.`,
                         footer: {
                             text: footer
                         }
@@ -173,10 +175,14 @@ ConsoleCosmeticLib.startUpSequence(() => {
 
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
 
-        const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]").replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "").replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone")).replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone"));
+        const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]")
+					.replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "")
+					.replace(Minecraft.username, colors.blue(Minecraft.username))
+					.replace("@everyone", colors.yellow("@everyone"))
+					.replace(Minecraft.username, colors.blue(Minecraft.username));
 
         if (formattedMessage.length < 8) {
-            console.log(colors.magenta("[#]") + colors.gray(" Console Message - IGNORE"));
+            console.log(colors.magenta("[#]") + colors.gray(" This is a console message from Mineclub. You can most likely ignore this."));
         } else {
             console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
         }
@@ -196,7 +202,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     embeds: [
                         new MessageEmbed({
                             color: embedColor,
-                            title: emojis.CHRISTMAS_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " CHRISTMAS TOKEN(S)!",
+                            title: emojis.CHRISTMAS_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " ANNIVERSARY TOKEN(S)!",
                             description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
                             footer: {
                                 text: footer
@@ -228,8 +234,21 @@ ConsoleCosmeticLib.startUpSequence(() => {
             }
 	        else if (message.includes("Purchase") && shouldSendGG) {
                   if (shouldSendGG) {
-                 
-		                Minecraft.chat("GG"); 
+			const possibleGGs = [
+				"GG!",
+				"gg",
+				"GG",
+				"yooo gg!",
+				"ggs!",
+				"Ayy, GG!",
+				"Wooo, GG!",
+				"GG :P",
+				"gg dude",
+				"g to the g!"
+			];
+			  
+			const index = Math.floor(Math.random() * possibleGGs.length)
+			Minecraft.chat(possibleGGs[index]); 
                   }
                   sessionStats.purchases += 1;
                   Discord.send({
