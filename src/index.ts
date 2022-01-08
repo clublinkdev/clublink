@@ -119,35 +119,42 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     ChatBridge.on("line", (input) => {
-        
-        if (input.startsWith("?")) {
-            switch (input) {
-                case "?leave":
-                    ChatBridge.close();
-                    ChatBridge = readline.createInterface(process.stdin, process.stdout);
-                    Minecraft.end();
-                    console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
-                    ChatBridge.setPrompt("");
-                    ChatBridge.prompt();
-                case "?disconnect":
-                    ChatBridge.close();
-                    ChatBridge = readline.createInterface(process.stdin, process.stdout);
-                    Minecraft.end();
-                    console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
-                    ChatBridge.setPrompt("");
-                    ChatBridge.prompt();
-            }
+        if (logChatData){
+            if (input.startsWith("?")) {
+                switch (input) {
+                    case "?leave":
+                        ChatBridge.close();
+                        ChatBridge = readline.createInterface(process.stdin, process.stdout);
+                        Minecraft.end();
+                        console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
+                        ChatBridge.setPrompt("");
+                        ChatBridge.prompt();
+                    case "?disconnect":
+                        ChatBridge.close();
+                        ChatBridge = readline.createInterface(process.stdin, process.stdout);
+                        Minecraft.end();
+                        console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
+                        ChatBridge.setPrompt("");
+                        ChatBridge.prompt();
+                    case "?quit":
+                        ChatBridge.close();
+                        ChatBridge = readline.createInterface(process.stdin, process.stdout);
+                        Minecraft.end();
+                        console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
+                        ChatBridge.setPrompt("");
+                        ChatBridge.prompt();
+                }
         } else if (input.startsWith("/home")) {
-	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-	} else if (input.startsWith("/afk")) {
-	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-	} else if (input.startsWith("/stafflounge")) {
-	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-	} else if (input.startsWith("/hub")) {
-	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-	} else if (input.startsWith("/tpa") {
-	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));		   
-	} else if (input.startsWith("/")) {
+	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	      } else if (input.startsWith("/afk")) {
+	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	      } else if (input.startsWith("/stafflounge")) {
+	       console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	      } else if (input.startsWith("/hub")) {
+	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	      } else if (input.startsWith("/tpa") {
+	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));		   
+	      } else if (input.startsWith("/")) {
             Minecraft.chat(input);
             Discord.send({
                 username: "ClubLink " + "[" + Minecraft.username + "] ",
@@ -163,32 +170,33 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     })
                 ],
             })
-	} else {
+	      } else {
             Minecraft.chat(input);
         }
 
-    });
+    } else {console.log('Sorry! You can not chat without the --chat argument.')}
+});
 
     Minecraft.on("windowOpen", (window) => {
         if (logGUIData) console.log(colors.cyan("[$]") + colors.gray(" GUI opened with title \"" + window.title + "\""));
     });
 
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
-
-        const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]")
+        const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]").replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "").replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone")).replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone"));
+        if (logChatData) {         
+          const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]")
 					.replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "")
 					.replace(Minecraft.username, colors.blue(Minecraft.username))
 					.replace("@everyone", colors.yellow("@everyone"))
 					.replace(Minecraft.username, colors.blue(Minecraft.username));
 
-        if (formattedMessage.length < 8) {
-            console.log(colors.magenta("[#]") + colors.gray(" This is a console message from Mineclub. You can most likely ignore this."));
-        } else {
-            console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
+          if (formattedMessage.length < 8) {
+              console.log(colors.magenta("[#]") + colors.gray(" This is a console message from Mineclub. You can most likely ignore this."));
+          } else {
+              console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
+          }
         }
-
-        
-
+     
         if (messagePosition == "system") {
             if (message.match(/[\W]* You won ([0-9]) (\w*) Token[s]?!/g) != null) {
                 let amount = Number.parseInt(message.replace(/[^0-9]+/, "")) 
