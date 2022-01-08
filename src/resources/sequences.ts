@@ -5,4 +5,5 @@ export default {
     MANAGER_TITLE: "愃忧惋忧悈怡愤",
     OWNER_TITLE: "愭肄惋怡愤",
     SUS_TITLE: "憭匆憭",
+    PRIDE_TITLE: "鸨愤慎匀怡"
 };

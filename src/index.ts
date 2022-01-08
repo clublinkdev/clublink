@@ -185,6 +185,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
             .replace(sequences.ADMIN_TITLE, " [Admin]")
             .replace(sequences.MANAGER_TITLE, " [Manager]")
             .replace(sequences.OWNER_TITLE, " [Owner]")
+            .replace(sequences.PRIDE_TITLE, " [Pride]")
             .replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "")
             .replace(Minecraft.username, colors.blue(Minecraft.username))
             .replace("@everyone", colors.yellow("@everyone"))
@@ -202,10 +203,11 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     colors.cyan("[<]") +
                     colors.yellow(chatMsg[0]
                         .replace(" [Sus]", colors.magenta(" [Sus]"))
+                        .replace(" [Pride]", colors.magenta(" [Pride]"))
                         .replace(" [Beta]", colors.magenta(" [Beta]"))
-                        .replace(" [Mod]", colors.green(" [Mod]"))
+                        .replace(" [Mod]", colors.blue(" [Mod]"))
                         .replace(" [Admin]", colors.red(" [Admin]"))
-                        .replace(" [Manager]", colors.red(" [Manager]"))
+                        .replace(" [Manager]", colors.yellow(" [Manager]"))
                         .replace(" [Owner]", colors.red(" [Owner]"))
                     ) + ":" +
                     colors.cyan(chatMsg[1])
@@ -323,15 +325,24 @@ ConsoleCosmeticLib.startUpSequence(() => {
             }
 
 	        else if (message.includes("這")) {
-                    const match1 = 
-                    Discord.send({
-                        username: "ClubLink " + "[" + Minecraft.username + "] ",
-                        avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-                        embeds: [
+
+                const regex = RegExp(/[\W]+Purchase made by: [\W]+([\w]+)/g);
+                const output = regex.exec(message)!
+
+                const paymentAmount = Number.parseInt(message.replace(/[^0-9]+/, ""));
+                const purchaser = output[1];
+
+                sessionStats.marketGems += paymentAmount;
+                sessionStats.totalGems += paymentAmount;
+
+                Discord.send({
+                    username: "ClubLink " + "[" + Minecraft.username + "] ",
+                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                    embeds: [
                         new MessageEmbed({
                             color: embedColor,
                             title: "MARKET - SELL",
-                            description: `You sold an item which you had on the market!`!,
+                            description: `You sold an item which you had on the market! It was sold to ${purchaser} for ${paymentAmount} gems.`,
                             footer: {
                                 text: footer
                             }
@@ -386,7 +397,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
 
     });
 
-    Minecraft.on("chat", async (username, message, translate, jsonMsg, matches) => {
+    Minecraft.on("chat", async (username, message) => {
         if (logChatData) {
             if (username == Minecraft.username) {
                 return;
