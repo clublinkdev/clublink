@@ -229,7 +229,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     sessionStats.spinAmount += 1;
 
                     Discord.send({
-                        content: `<@${process.env.USERID}> - You are able to spin! Now able to spin: ${sessionStats.spinAmount} times`,
+                        content: `<@${process.env.USERID}> - You are able to spin! Now able to spin: ${sessionStats.spinAmount} time(s)`,
                         username: "ClubLink " + "[" + Minecraft.username + "] ",
                         avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
                         embeds: [
@@ -276,7 +276,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         new MessageEmbed({
                             color: embedColor,
                             title: emojis.GEMS + " YOU EARNT 50 GEMS",
-                            description: `You've now earnt ${sessionStats.totalGems} in total during this session!`,
+                            description: `You've now earnt ${sessionStats.totalGems}` + emojis.GEMS + ` in total during this session! \n Activity Gems: ${sessionStats.activityGems}` + emojis.GEMS + `\n Market Gems: ${sessionStats.marketGems}` + emojis.GEMS,
                             footer: {
                                 text: footer
                             }
@@ -342,7 +342,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         new MessageEmbed({
                             color: embedColor,
                             title: "MARKET - SELL",
-                            description: `You sold an item which you had on the market! It was sold to ${purchaser} for ${paymentAmount} gems.`,
+                            description: `You sold an item which you had on the market! \n Buyer: ${purchaser} \n Amount: ${paymentAmount}` + emojis.GEMS,
                             footer: {
                                 text: footer
                             }
