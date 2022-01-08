@@ -50,6 +50,7 @@ var playerData = {
 
 var logGUIData = false;
 var logChatData = false;
+var shouldSendGG: boolean;
 
 config();
 console.clear();
@@ -79,6 +80,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
     
     Minecraft = mineflayer.createBot(options);
     console.log(colors.green("[+]") + colors.gray(" Established MineClub connection on version 1.17.1"));
+    if(process.env.AUTOGG as string == "true") { shouldSendGG = true; } else { shouldSendGG = false; }
 
     
     console.log(colors.yellow("[@]") + colors.gray(" Connecting to lobby server..."));
@@ -219,9 +221,9 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ],
                 })
             }
-	        else if (message.includes("Purchase")) {
+	        else if (message.includes("Purchase") && shouldSendGG == true) {
                 sessionStats.purchases += 1;
-		        Minecraft.chat("GG (From ClubLink)");
+		Minecraft.chat("GG");
                 Discord.send({
                     username: "ClubLink " + "[" + Minecraft.username + "] ",
                     avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
