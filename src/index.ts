@@ -69,7 +69,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
     console.log(colors.green("[+]") + colors.gray(" Webhook client created")); 
 
     const options = {
-        host: "play.mineclub.com",
+        host: "mineclub.com",
         username: process.env.EMAIL as string,
         password: process.env.PASSWORD as string,
         auth: process.env.AUTH as "microsoft" | "mojang",
@@ -166,12 +166,38 @@ ConsoleCosmeticLib.startUpSequence(() => {
 
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
 
-        const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]").replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "").replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone")).replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone"));
+        const formattedMessage = message
+            .replace(sequences.MOD_TITLE, " [Mod]")
+            .replace(sequences.ADMIN_TITLE, " [Admin]")
+            .replace(sequences.MANAGER_TITLE, " [Manager]")
+            .replace(sequences.OWNER_TITLE, " [Owner]")
+            .replace(sequences.BETA_TITLE, " [Beta]")
+            .replace(sequences.SUS_TITLE, " [Sussy Baka]")
+            .replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "")
+            .replace(Minecraft.username, colors.magenta(Minecraft.username))
+            .replace("@everyone", colors.yellow("@everyone"));
 
         if (formattedMessage.length < 8) {
             console.log(colors.magenta("[#]") + colors.gray(" Console Message - IGNORE"));
         } else {
-            console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
+            var chatMsg = formattedMessage.split(":");
+            if(chatMsg[1] === undefined) {  // when receiving tokens, game duel request, etc. (so it would show "undefinded")
+                console.log(colors.cyan("[<] " + formattedMessage));
+            } else {
+                if (logChatData)
+                    console.log(
+                        colors.white("[<]") +
+                        colors.white(chatMsg[0]
+                            .replace(" [Mod]", colors.cyan(" [Mod]"))
+                            .replace(" [Admin]", colors.red(" [Admin]"))
+                            .replace(" [Manager]", colors.red(" [Manager]"))
+                            .replace(" [Owner]", colors.red(" [Owner]"))
+                            .replace(" [Beta]", colors.magenta(" [Beta]"))
+                            .replace(" [Sussy Baka]", colors.green(" [Sussy Baka]"))
+                        ) + ":" +
+                        colors.white(chatMsg[1])
+                    );
+            }
         }
 
         
@@ -221,7 +247,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
             }
 	        else if (message.includes("Purchase")) {
                 sessionStats.purchases += 1;
-		        Minecraft.chat("GG");
+		        Minecraft.chat("GG (From ClubLink)");
                 Discord.send({
                     username: "ClubLink " + "[" + Minecraft.username + "] ",
                     avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
