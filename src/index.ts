@@ -50,6 +50,7 @@ var playerData = {
 
 var logGUIData = false;
 var logChatData = false;
+var shouldSendGG = false;
 
 config();
 console.clear();
@@ -63,6 +64,11 @@ ConsoleCosmeticLib.startUpSequence(() => {
     if (process.argv.includes("--chat")) {
         logChatData = true;
         console.log(colors.red("[$]") + colors.gray(" Chat flag detected, logging all chat messages"));
+    }
+  
+    if (process.argv.includes("--gg")) {     
+        shouldSendGG = true;
+        console.log(colors.red("[$]") + colors.gray(" GG flag detected, sending GG messages on store purchase"));
     }
 
     Discord = new WebhookClient({ url: process.env.URL as string });
@@ -79,6 +85,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
     
     Minecraft = mineflayer.createBot(options);
     console.log(colors.green("[+]") + colors.gray(" Established MineClub connection on version 1.17.1"));
+    if(process.env.AUTOGG as string == "true") { shouldSendGG = true; } else { shouldSendGG = false; }
 
     
     console.log(colors.yellow("[@]") + colors.gray(" Connecting to lobby server..."));
@@ -219,23 +226,26 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ],
                 })
             }
-	        else if (message.includes("Purchase")) {
-                sessionStats.purchases += 1;
-		        Minecraft.chat("GG");
-                Discord.send({
-                    username: "ClubLink " + "[" + Minecraft.username + "] ",
-                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-                    embeds: [
-                        new MessageEmbed({
-                            color: embedColor,
-                            title: "STORE PURCHASE",
-                            description: `There have now been ${sessionStats.purchases} during this session!`,
-                            footer: {
-                                text: footer
-                            }
-                        })
-                    ],
-                })
+	        else if (message.includes("Purchase") && shouldSendGG) {
+                  if (shouldSendGG) {
+                 
+		                Minecraft.chat("GG"); 
+                  }
+                  sessionStats.purchases += 1;
+                  Discord.send({
+                      username: "ClubLink " + "[" + Minecraft.username + "] ",
+                      avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                      embeds: [
+                          new MessageEmbed({
+                              color: embedColor,
+                              title: "STORE PURCHASE",
+                              description: `There have now been ${sessionStats.purchases} during this session!`,
+                              footer: {
+                                  text: footer
+                              }
+                          })
+                      ],
+                  })
             }
 	        else if (message.includes("這")) {
                     Discord.send({
