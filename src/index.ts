@@ -152,7 +152,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
 	       console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
 	      } else if (input.startsWith("/hub")) {
 	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-	      } else if (input.startsWith("/tpa") {
+	      } else if (input.startsWith("/tpa")) {
 	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));		   
 	      } else if (input.startsWith("/")) {
             Minecraft.chat(input);
