@@ -8,13 +8,18 @@
     "dotenv": "^10.0.0",
     "figlet": "^1.5.2",
     "format-duration": "^1.4.0",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^10.0.0",
     "mineflayer": "^3.14.0",
-    "prismarine-viewer": "^1.21.0"
+    "node-fetch": "^3.1.0",
+    "path": "^0.12.7",
+    "prismarine-viewer": "^1.21.0",
+    "shell": "^0.8.6",
+    "shelljs": "^0.8.5"
   },
   "name": "clublink",
-  "version": "3.0.1",
+  "version": "0.3.5",
   "main": "src/index.ts",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/index.ts --gui --chat",
