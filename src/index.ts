@@ -50,6 +50,7 @@ var playerData = {
 
 var logGUIData = false;
 var logChatData = false;
+var shouldSendGG = false;
 
 config();
 console.clear();
@@ -63,6 +64,11 @@ ConsoleCosmeticLib.startUpSequence(() => {
     if (process.argv.includes("--chat")) {
         logChatData = true;
         console.log(colors.red("[$]") + colors.gray(" Chat flag detected, logging all chat messages"));
+    }
+  
+    if (process.argv.includes("--gg")) {     
+        shouldSendGG = true;
+        console.log(colors.red("[$]") + colors.gray(" GG flag detected, sending GG messages on store purchase"));
     }
 
     Discord = new WebhookClient({ url: process.env.URL as string });
@@ -79,6 +85,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
     
     Minecraft = mineflayer.createBot(options);
     console.log(colors.green("[+]") + colors.gray(" Established MineClub connection on version 1.17.1"));
+    if(process.env.AUTOGG as string == "true") { shouldSendGG = true; } else { shouldSendGG = false; }
 
     
     console.log(colors.yellow("[@]") + colors.gray(" Connecting to lobby server..."));
@@ -137,33 +144,35 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         ChatBridge.setPrompt("");
                         ChatBridge.prompt();
                 }
-            } else if (input.startsWith("/home")) {
-        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-        } else if (input.startsWith("/afk")) {
-        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-        } else if (input.startsWith("/stafflounge")) {
-        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-        } else if (input.startsWith("/hub")) {
-        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
-        } else if (input.startsWith("/")) {
-                Minecraft.chat(input);
-                Discord.send({
-                    username: "ClubLink " + "[" + Minecraft.username + "] ",
-                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-                    embeds: [
-                        new MessageEmbed({
-                            color: embedColor,
-                            title: "USED COMMAND!",
-                            description: `You have just ran a command via the panel.`,
-                            footer: {
-                                text: footer
-                            }
-                        })
-                    ],
-                })
-        } else{
-                Minecraft.chat(input);
-            }
+        } else if (input.startsWith("/home")) {
+	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	      } else if (input.startsWith("/afk")) {
+	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	      } else if (input.startsWith("/stafflounge")) {
+	       console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	      } else if (input.startsWith("/hub")) {
+	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	      } else if (input.startsWith("/tpa") {
+	        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));		   
+	      } else if (input.startsWith("/")) {
+            Minecraft.chat(input);
+            Discord.send({
+                username: "ClubLink " + "[" + Minecraft.username + "] ",
+                avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                embeds: [
+                    new MessageEmbed({
+                        color: embedColor,
+                        title: "Used command `" + input + "`!",
+                        description: `You have just ran a command via console.`,
+                        footer: {
+                            text: footer
+                        }
+                    })
+                ],
+            })
+	      } else {
+            Minecraft.chat(input);
+        }
 
     } else {console.log('Sorry! You can not chat without the --chat argument.')}
 });
@@ -173,17 +182,21 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
-
         const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]").replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "").replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone")).replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone"));
-        if (logChatData)
-            if (formattedMessage.length < 8) {
-                console.log(colors.magenta("[#]") + colors.gray(" Console Message - IGNORE"));
-            } else {
-                console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
-            }
+        if (logChatData) {         
+          const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]")
+					.replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "")
+					.replace(Minecraft.username, colors.blue(Minecraft.username))
+					.replace("@everyone", colors.yellow("@everyone"))
+					.replace(Minecraft.username, colors.blue(Minecraft.username));
 
-        
-
+          if (formattedMessage.length < 8) {
+              console.log(colors.magenta("[#]") + colors.gray(" This is a console message from Mineclub. You can most likely ignore this."));
+          } else {
+              console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
+          }
+        }
+     
         if (messagePosition == "system") {
             if (message.match(/[\W]* You won ([0-9]) (\w*) Token[s]?!/g) != null) {
                 let amount = Number.parseInt(message.replace(/[^0-9]+/, "")) 
@@ -197,7 +210,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     embeds: [
                         new MessageEmbed({
                             color: embedColor,
-                            title: emojis.CHRISTMAS_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " CHRISTMAS TOKEN(S)!",
+                            title: emojis.CHRISTMAS_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " ANNIVERSARY TOKEN(S)!",
                             description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
                             footer: {
                                 text: footer
@@ -227,23 +240,39 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ],
                 })
             }
-	        else if (message.includes("Purchase")) {
-                sessionStats.purchases += 1;
-		        Minecraft.chat("GG");
-                Discord.send({
-                    username: "ClubLink " + "[" + Minecraft.username + "] ",
-                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-                    embeds: [
-                        new MessageEmbed({
-                            color: embedColor,
-                            title: "STORE PURCHASE",
-                            description: `There have now been ${sessionStats.purchases} during this session!`,
-                            footer: {
-                                text: footer
-                            }
-                        })
-                    ],
-                })
+	        else if (message.includes("Purchase") && shouldSendGG) {
+                  if (shouldSendGG) {
+			const possibleGGs = [
+				"GG!",
+				"gg",
+				"GG",
+				"yooo gg!",
+				"ggs!",
+				"Ayy, GG!",
+				"Wooo, GG!",
+				"GG :P",
+				"gg dude",
+				"g to the g!"
+			];
+			  
+			const index = Math.floor(Math.random() * possibleGGs.length)
+			Minecraft.chat(possibleGGs[index]); 
+                  }
+                  sessionStats.purchases += 1;
+                  Discord.send({
+                      username: "ClubLink " + "[" + Minecraft.username + "] ",
+                      avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                      embeds: [
+                          new MessageEmbed({
+                              color: embedColor,
+                              title: "STORE PURCHASE",
+                              description: `There have now been ${sessionStats.purchases} during this session!`,
+                              footer: {
+                                  text: footer
+                              }
+                          })
+                      ],
+                  })
             }
 	        else if (message.includes("這")) {
                     Discord.send({
