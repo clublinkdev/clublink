@@ -7,7 +7,7 @@ import path from "path";
 const directory = "src";
 var srcExists;
 var needsUpdate;
-const fileName = "updating/version";
+const fileName = "updating/version.txt";
 
 
 fs.access(directory, function(error) {
@@ -75,7 +75,7 @@ async function checkVersion() {
     console.log(clientVersion);
     if (clientVersion != data) {
         needsUpdate = true;
-        fs.writeFile('updating/version', data, err => {
+        fs.writeFile('updating/version.txt', data, err => {
             if (err) {
                 console.error(err)
                 return
