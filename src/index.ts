@@ -166,12 +166,35 @@ ConsoleCosmeticLib.startUpSequence(() => {
 
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
 
-        const formattedMessage = message.replace(sequences.ADMIN_TITLE, " [Admin]").replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "").replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone")).replace(Minecraft.username, colors.blue(Minecraft.username)).replace("@everyone", colors.yellow("@everyone"));
+        const formattedMessage = message
+            .replace(sequences.MOD_TITLE, " [Mod]")
+            .replace(sequences.ADMIN_TITLE, " [Admin]")
+            .replace(sequences.MANAGER_TITLE, " [Manager]")
+            .replace(sequences.OWNER_TITLE, " [Owner]")
+            .replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "")
+            .replace(Minecraft.username, colors.blue(Minecraft.username))
+            .replace("@everyone", colors.yellow("@everyone"))
+            .replace(Minecraft.username, colors.blue(Minecraft.username))
+            .replace("@everyone", colors.yellow("@everyone"));
 
         if (formattedMessage.length < 8) {
             console.log(colors.magenta("[#]") + colors.gray(" Console Message - IGNORE"));
         } else {
-            console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
+            var chatMsg = formattedMessage.split(":");
+            if(chatMsg[1] === undefined) {  // when receiving tokens, game duel request, etc. (so it would show "undefinded")
+                console.log(colors.cyan("[<] " + formattedMessage));
+            } else {
+                console.log(
+                    colors.cyan("[<]") +
+                    colors.yellow(chatMsg[0]
+                        .replace(" [Mod]", colors.green(" [Mod]"))
+                        .replace(" [Admin]", colors.red(" [Admin]"))
+                        .replace(" [Manager]", colors.red(" [Manager]"))
+                        .replace(" [Owner]", colors.red(" [Owner]"))
+                    ) + ":" +
+                    colors.cyan(chatMsg[1])
+                );
+            }
         }
 
         
