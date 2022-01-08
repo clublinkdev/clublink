@@ -13,6 +13,7 @@ export default class ConsoleCosmeticLib {
         }, async (err, data) =>  {
             await console.log(colors.blue(data as string));
             console.log(colors.cyan("Developed by hanatic | Running version " + require("../../package.json").version + "\n"));
+            console.log(colors.red("Please note that we are not responsible for your actions regarding this code. Any broken rules or modified code cannot be our responsibility."));
             after();
         });
     }
