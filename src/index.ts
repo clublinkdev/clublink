@@ -167,6 +167,8 @@ ConsoleCosmeticLib.startUpSequence(() => {
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
 
         const formattedMessage = message
+            .replace(sequences.SUS_TITLE, " [Sus]")
+            .replace(sequences.BETA_TITLE, " [Beta]")
             .replace(sequences.MOD_TITLE, " [Mod]")
             .replace(sequences.ADMIN_TITLE, " [Admin]")
             .replace(sequences.MANAGER_TITLE, " [Manager]")
@@ -187,6 +189,8 @@ ConsoleCosmeticLib.startUpSequence(() => {
                 console.log(
                     colors.cyan("[<]") +
                     colors.yellow(chatMsg[0]
+                        .replace(" [Sus]", colors.magenta(" [Sus]"))
+                        .replace(" [Beta]", colors.magenta(" [Beta]"))
                         .replace(" [Mod]", colors.green(" [Mod]"))
                         .replace(" [Admin]", colors.red(" [Admin]"))
                         .replace(" [Manager]", colors.red(" [Manager]"))

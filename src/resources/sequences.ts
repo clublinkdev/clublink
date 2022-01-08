@@ -4,4 +4,5 @@ export default {
     MOD_TITLE: "ꌄ섆魉쌇뜆醭愃ꈂ愭ꈂ匀",
     MANAGER_TITLE: "ꌄ섆魉쌈뜈ꈋ愃忧惋忧悈怡愤",
     OWNER_TITLE: "ꌄ섆魉쌆뜈ꈋ愭ꈂ肄ꈂ惋ꈂ怡ꈂ愤",
+    SUS_TITLE: "ꌄ섆魉叆뜆醭憭ꈂ匆ꈂ憭",
 };
