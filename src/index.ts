@@ -8,7 +8,6 @@ import formatDuration from "format-duration";
 import ConsoleCosmeticLib from "./resources/console";
 import emojis from "./resources/emojis";
 import sequences from "./resources/sequences";
-import DateUtil from "./util/date";
 
 var Minecraft: mineflayer.Bot;
 var Discord: WebhookClient;
@@ -218,9 +217,8 @@ ConsoleCosmeticLib.startUpSequence(() => {
 
         if (messagePosition == "system") {
             if (message.match(/[\W]* You won ([0-9]) (\w*) Token[s]?!/g) != null) {
-                let amount = Number.parseInt(message.replace(/[^0-9]+/, "")) 
                 let spinner = Math.floor(sessionStats.totalTokens / 10)
-                if(spinner == sessionStats.spinAmount) {
+                if (spinner !== sessionStats.spinAmount) {
                     console.log(colors.magenta("[#]") + colors.gray(" Account earned tokens"));
                     console.log(colors.magenta("[#]") + colors.gray(" Account is able to spin!"));
 
@@ -389,35 +387,36 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     Minecraft.on("chat", async (username, message, translate, jsonMsg, matches) => {
-        if (username == Minecraft.username) {
-            return;
+        if (logChatData) {
+            if (username == Minecraft.username) {
+                return;
+            }
+    
+            if ((message.includes(Minecraft.username)) || (message.includes("@everyone"))) {
+                sessionStats.pings += 1
+                Discord.send({
+                    content: `<@${process.env.USERID}>, you were mentioned in public chat!`,
+                    username: "ClubLink " + "[" + Minecraft.username + "] ",
+                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                    embeds: [
+                        new MessageEmbed({
+                            color: embedColor,
+                            description: username + ": " + message,
+                            footer: {
+                                text: footer
+                            }
+                        })
+                    ],
+                })
+                
+                console.log(colors.magenta("[#]") + colors.cyan(" Account was mentioned in public chat either by username or by use of @everyone"));
+            }
+    
+            if ((message.match(/\bgoodnight\b/g) || message.match(/\bnight\b/g) || message.match(/\bnini\b/g) ||message.match(/\bgn\b/g)) && message.includes(Minecraft.username)) {
+                sessionStats.goodnights += 1;
+                console.log(colors.magenta("[#]") + colors.cyan(" Account recieved a goodnight from a player"));
+            }
         }
-
-        if ((message.includes(Minecraft.username)) || (message.includes("@everyone"))) {
-            sessionStats.pings += 1
-            Discord.send({
-                content: `<@${process.env.USERID}>, you were mentioned in public chat!`,
-                username: "ClubLink " + "[" + Minecraft.username + "] ",
-                avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-                embeds: [
-                    new MessageEmbed({
-                        color: embedColor,
-                        description: username + ": " + message,
-                        footer: {
-                            text: footer
-                        }
-                    })
-                ],
-            })
-            
-            console.log(colors.magenta("[#]") + colors.cyan(" Account was mentioned in public chat either by username or by use of @everyone"));
-        }
-
-        if ((message.match(/\bgoodnight\b/g) || message.match(/\bnight\b/g) || message.match(/\bnini\b/g) ||message.match(/\bgn\b/g)) && message.includes(Minecraft.username)) {
-            sessionStats.goodnights += 1;
-            console.log(colors.magenta("[#]") + colors.cyan(" Account recieved a goodnight from a player"));
-        }
-        
     });
 
     Minecraft.on("end", (reason) => {
