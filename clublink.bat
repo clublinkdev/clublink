@@ -1,4 +1,5 @@
 if exist node_modules\ (
+	node updating/update.js
 	ts-node ./src/index.ts --gui --chat
 	pause
 ) else (
