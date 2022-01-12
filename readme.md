@@ -29,7 +29,7 @@ USERID=<Your Discord user ID>
 6. Finally, run `ts-node ./src/index.ts`
 
 #### Flags
-If you want to view chat messages & send them, add the `--chat` flag to the end of the command.
+If you want to send GG's when people buy boxes from `store.mineclub.com`, add the `--gg` flag to the end of the command.
 If you want to view data about GUIs that are opened, add the `--gui` flag to the end of the command.
   
 ### Bugs
