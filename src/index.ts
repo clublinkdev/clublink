@@ -177,7 +177,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
-
+      if (logChatData) { 
         const formattedMessage = message
             .replace(sequences.SUS_TITLE, " [Sus]")
             .replace(sequences.BETA_TITLE, " [Beta]")
@@ -213,6 +213,88 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     colors.cyan(chatMsg[1])
                 );
             }
+      } else {
+          console.log(colors.cyan("[<]") + colors.cyan(formattedMessage));
+      }
+     
+      if (messagePosition == "system") {
+          if (message.match(/[\W]* You won ([0-9]) (\w*) Token[s]?!/g) != null) {
+              let amount = Number.parseInt(message.replace(/[^0-9]+/, "")) 
+
+          sessionStats.totalTimesWon += 1;
+              sessionStats.totalTokens += Number.parseInt(message.replace(/[^0-9]+/g, ""));
+
+              Discord.send({
+                  username: "ClubLink " + "[" + Minecraft.username + "] ",
+                  avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                  embeds: [
+                      new MessageEmbed({
+                          color: embedColor,
+                          title: emojis.ANNIVERSARY_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " ANNIVERSARY TOKEN(S)!",
+                          description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
+                          footer: {
+                              text: footer
+                          }
+                      })
+                  ],
+              })
+
+              console.log(colors.magenta("[#]") + colors.gray(" Account earned tokens"));
+
+          }
+          if (message.includes("阵")) {
+              sessionStats.totalGems += 50;
+          sessionStats.activityGems += 50;
+              Discord.send({
+                  username: "ClubLink " + "[" + Minecraft.username + "] ",
+                  avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                  embeds: [
+                      new MessageEmbed({
+                          color: embedColor,
+                          title: emojis.GEMS + " YOU EARNT 50 GEMS",
+                          description: `You've now earnt ${sessionStats.totalGems} in total during this session!`,
+                          footer: {
+                              text: footer
+                          }
+                      })
+                  ],
+              })
+          }
+     else if (message.includes("Purchase") && shouldSendGG) {
+                if (shouldSendGG) {
+                    const possibleGGs = [
+                      "GG!",
+                      "gg",
+                      "GG",
+                      "yooo gg!",
+                      "ggs!",
+                      "Ayy, GG!",
+                      "Wooo, GG!",
+                      "GG :P",
+                      "gg dude",
+                      "g to the g!"
+                    ];
+
+                    const index = Math.floor(Math.random() * possibleGGs.length)
+                    Minecraft.chat(possibleGGs[index]); 
+                                }
+                                sessionStats.purchases += 1;
+                                Discord.send({
+                                    username: "ClubLink " + "[" + Minecraft.username + "] ",
+                                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
+                                    embeds: [
+                                        new MessageEmbed({
+                                            color: embedColor,
+                                            title: "STORE PURCHASE",
+                                            description: `There have now been ${sessionStats.purchases} during this session!`,
+                                            footer: {
+                                                text: footer
+                                            }
+                                        })
+                                    ],
+                                })
+                  }
+        
         }
 
         
