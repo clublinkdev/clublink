@@ -3,6 +3,7 @@
 # If "node_modules" folder exists
 if [ -d "./node_modules" ] 2>/dev/null
 then
+	echo "Welcome to ClubLink!"
 	read -r -p "Do you want to view data about GUIs that are opened? [Y/n] " input
 	case $input in
 		[yY][eE][sS]|[yY])
