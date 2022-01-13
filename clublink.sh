@@ -47,7 +47,7 @@ then
 else
 	echo "Modules not detected. Application hasn't been installed."
 	# If using WindowsOS, skip sudo prompt
-	if [ "$OSTYPE" == "msys" ] || [ "$OSTYPE" == "cygwin" ]
+	if [ "$OSTYPE" == "msys" ] || [ "$OSTYPE" == "cygwin" ] 2>/dev/null
 	then
 		read -r -p "Do you wish to run the installation? [Y/n] " input
 		case $input in
