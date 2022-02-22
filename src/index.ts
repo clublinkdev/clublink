@@ -1,4 +1,4 @@
-import { MessageEmbed, WebhookClient } from "discord.js"
+import { Emoji, MessageEmbed, WebhookClient } from "discord.js"
 import { config } from "dotenv";
 import mineflayer from "mineflayer";
 import colors from "colors";
@@ -8,6 +8,9 @@ import formatDuration from "format-duration";
 import ConsoleCosmeticLib from "./resources/console";
 import emojis from "./resources/emojis";
 import sequences from "./resources/sequences";
+import { parseEmojis } from "./resources/emojis";
+import { parseTitleName } from "./resources/emojis";
+import { getRank } from "./resources/emojis";
 
 var Minecraft: mineflayer.Bot;
 var Discord: WebhookClient;
@@ -23,7 +26,7 @@ const embedColor = "#ADD8E6";
  * work. If you want to take credit, write your own bot. No one likes
  * having their code stolen. Please don't do it to me <3 - Hannah
  */
-const footer = "Powered by ClubLink | A GemDev Platform"
+const footer = "Powered by ClubLink | Maintained by xCrystalz_"
 
 var sessionStats = {
     // Session Time Stats
@@ -90,17 +93,18 @@ ConsoleCosmeticLib.startUpSequence(() => {
     
     console.log(colors.yellow("[@]") + colors.gray(" Connecting to lobby server..."));
     Minecraft.once("spawn", () =>  {
-
+        // Start MineClub
         playerData.UUID = Minecraft.player.uuid;
         Minecraft.acceptResourcePack();
 
         Discord.send({
-            username: "ClubLink - " + Minecraft.username,
+            username: "ClubLink [" + Minecraft.username + "]",
             avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
             embeds: [
                 new MessageEmbed({
                     color: embedColor,
-                    title: "Connection established",
+                    title: "<:mineclub:945347249578344508> Connection Established <:mineclub:945347249578344508>",
+                    description: "Successfully connected to **MineClub** <:mineclub:945347249578344508> \n Account: **" + Minecraft.username + "**",
                     footer: {
                         text: footer
                     }
@@ -108,7 +112,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
             ],
         }).then(() => {            
             console.log(colors.green("[+]") + colors.gray(" Successfully joined an available lobby server"));
-            console.log(colors.red("[$]") + colors.gray(" ClubLink are not responsible for user modifications in our code - nor responsible for the accounts that are using this modified code."));
+            console.log(colors.red("[$]") + colors.gray(" ClubLink is no longer being worked on publicly, all changes made are the players mistake."));
             sessionStats.sessionStart = new Date();
         })
     });
@@ -120,17 +124,10 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     ChatBridge.on("line", (input) => {
-        
+        // Console -> Minecraft Chat + Commands + TOS Protection
         if (input.startsWith("?")) {
             switch (input) {
                 case "?leave":
-                    ChatBridge.close();
-                    ChatBridge = readline.createInterface(process.stdin, process.stdout);
-                    Minecraft.end();
-                    console.log(colors.red("[-]") + colors.gray(" Disconnected from MineClub"));
-                    ChatBridge.setPrompt("");
-                    ChatBridge.prompt();
-                case "?disconnect":
                     ChatBridge.close();
                     ChatBridge = readline.createInterface(process.stdin, process.stdout);
                     Minecraft.end();
@@ -144,12 +141,16 @@ ConsoleCosmeticLib.startUpSequence(() => {
 	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
 	} else if (input.startsWith("/stafflounge")) {
 	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+	} else if (input.startsWith("/staff")) {
+        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
 	} else if (input.startsWith("/hub")) {
 	  console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
 	} else if (input.startsWith("/tpa")) {
         console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
     } else if (input.startsWith("/tpahere")) {
         console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+    } else if (input.startsWith("/joinadminevent")) {
+        console.log(colors.magenta("[*]") + colors.gray(" Sorry! You are not allowed to join Admin Events on a Console Client!"));
 	} else if (input.startsWith("/")) {
             Minecraft.chat(input);
             Discord.send({
@@ -177,47 +178,21 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     Minecraft.on("messagestr", async (message, messagePosition, jsonMsg) => {
-
-        const formattedMessage = message
-            .replace(sequences.SUS_TITLE, " [Sus]")
-            .replace(sequences.BETA_TITLE, " [Beta]")
-            .replace(sequences.MOD_TITLE, " [Mod]")
-            .replace(sequences.ADMIN_TITLE, " [Admin]")
-            .replace(sequences.MANAGER_TITLE, " [Manager]")
-            .replace(sequences.OWNER_TITLE, " [Owner]")
-            .replace(sequences.PRIDE_TITLE, " [Pride]")
-            .replace(/[^a-zA-Z0-9 &/$£"^%&{}[\]@,<>/`!?~#:;\-_=+*.]/g, "")
-            .replace(Minecraft.username, colors.blue(Minecraft.username))
-            .replace("@everyone", colors.yellow("@everyone"))
-            .replace(Minecraft.username, colors.blue(Minecraft.username))
-            .replace("@everyone", colors.yellow("@everyone"));
-
-        if (formattedMessage.length < 8) {
-            console.log(colors.gray("CONSOLE: Receiving Tokens, Receiving Gems or Chat Messages being cleared"));
-        } else {
-            var chatMsg = formattedMessage.split(":");
-            if(chatMsg[1] === undefined) {  // when receiving tokens, game duel request, etc. (so it would show "undefinded")
-                console.log(colors.cyan("[<] " + formattedMessage));
-            } else {
-                console.log(
-                    colors.cyan("[<]") +
-                    colors.yellow(chatMsg[0]
-                        .replace(" [Sus]", colors.magenta(" [Sus]"))
-                        .replace(" [Pride]", colors.magenta(" [Pride]"))
-                        .replace(" [Beta]", colors.magenta(" [Beta]"))
-                        .replace(" [Mod]", colors.blue(" [Mod]"))
-                        .replace(" [Admin]", colors.red(" [Admin]"))
-                        .replace(" [Manager]", colors.yellow(" [Manager]"))
-                        .replace(" [Owner]", colors.red(" [Owner]"))
-                    ) + ":" +
-                    colors.cyan(chatMsg[1])
-                );
-            }
+        // Message formatting
+        if (message.includes(":")) {
+            let [, author, content] = /([^:]*):(.*)/.exec(message)!
+            let rank = getRank(author)
+            rank = rank ? rank[0].toUpperCase() + rank.slice(1) : undefined
+            let title = parseTitleName(author)
+            author = rank && rank !== title ? `[${rank}/${title}] ${author.replace(/\W+/g, "")}` : `[${title}] ${author.replace(/\W+/g, "")}`
+            content = parseEmojis(content.replace(/§\w/g, "")!)
+                .replace(Minecraft.username, colors.blue(Minecraft.username))
+                .replace("@everyone", colors.yellow("@everyone"))
+                console.log(colors.blue(`${author}`) + colors.gray(":") + colors.white(`${content}`));
         }
 
-        
-
         if (messagePosition == "system") {
+            // Tokens Detector
             if (message.match(/[\W]* You won ([0-9]) (\w*) Token[s]?!/g) != null) {
                 let spinner = Math.floor(sessionStats.totalTokens / 10)
                 if (spinner !== sessionStats.spinAmount) {
@@ -235,7 +210,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         embeds: [
                             new MessageEmbed({
                                 color: embedColor,
-                                title: emojis.ANNIVERSARY_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " ANNIVERSARY TOKEN(S)!",
+                                title: emojis.VALENTINES_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " VALENTINES TOKEN(S)!",
                                 description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
                                 footer: {
                                     text: footer
@@ -255,7 +230,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         embeds: [
                             new MessageEmbed({
                                 color: embedColor,
-                                title: emojis.ANNIVERSARY_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " ANNIVERSARY TOKEN(S)!",
+                                title: emojis.VALENTINES_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " VALENTINES TOKEN(S)!",
                                 description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
                                 footer: {
                                     text: footer
@@ -266,6 +241,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                 }
 
             }
+            // Activity Gems Detector
             if (message.includes("阵")) {
                 sessionStats.totalGems += 50;
 		        sessionStats.activityGems += 50;
@@ -276,7 +252,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         new MessageEmbed({
                             color: embedColor,
                             title: emojis.GEMS + " YOU EARNT 50 GEMS",
-                            description: `You've now earnt ${sessionStats.totalGems}` + emojis.GEMS + ` in total during this session! \n \n **Activity Gems:** ${sessionStats.activityGems}` + emojis.GEMS + `\n **Market Gems:** ${sessionStats.marketGems}` + emojis.GEMS,
+                            description: `You've now earnt ${sessionStats.activityGems}` + emojis.GEMS + ` from activity during this session!`,
                             footer: {
                                 text: footer
                             }
@@ -284,6 +260,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     ],
                 })
             }
+            // Purchases Detector
 	        else if (message.includes("Purchase") && shouldSendGG) {
                 if (shouldSendGG) {
                     setTimeout(storep,Math.floor(Math.random() * 10000) + 5000);
@@ -323,58 +300,13 @@ ConsoleCosmeticLib.startUpSequence(() => {
                     })
                 }
             }
-
-	        else if (message.includes("這")) {
-
-                const regex = RegExp(/[\W]+Purchase made by: [\W]+([\w]+)/g);
-                const output = regex.exec(message)!
-
-                const paymentAmount = Number.parseInt(message.replace(/[^0-9]+/, ""));
-                const purchaser = output[1];
-
-                sessionStats.marketGems += paymentAmount;
-                sessionStats.totalGems += paymentAmount;
-
-                Discord.send({
-                    username: "ClubLink " + "[" + Minecraft.username + "] ",
-                    avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-                    embeds: [
-                        new MessageEmbed({
-                            color: embedColor,
-                            title: "MARKET - SELL",
-                            description: `You sold an item which you had on the market! \n Buyer: ${purchaser} \n Amount: ${paymentAmount}` + emojis.GEMS,
-                            footer: {
-                                text: footer
-                            }
-                        })
-                    ],
-                })
-            }
-	        else if (message.includes("outbid")) {
-                const match = /\[(?:Market|Housing)] You have been outbid by \W+(\w+) ([\d,]+)/.exec("[Market] You have been outbid by ;;;.;'/';';;''lol 69420")
-                if (match) {
-                    Discord.send({
-                        username: "ClubLink " + "[" + Minecraft.username + "] ",
-                        avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
-                        embeds: [
-                            new MessageEmbed({
-                                color: embedColor,
-                                title: "MARKET - OUTBID",
-                                description: `You were outbid on the market! \n Outbid by: ${match![1]}, New Price: ${match![2].replace(/,/g, "")}`,
-                                footer: {
-                                    text: footer
-                                }
-                            })
-                        ],
-                    })
-                }
-            }
-                
+           // Token Message Detector
 	        else if (message.includes("鳠")) {
                 sessionStats.tokenMessages += 1;
             }
 
     } else if (messagePosition == "chat") {
+            // Message Detection
             if (message.match(/[\W]+(\w+) -> ME: ([\w\W]+)/g)) {
                 Discord.send({
                     content: `<@${process.env.USERID}> - you got a private message!`,
@@ -402,7 +334,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
             if (username == Minecraft.username) {
                 return;
             }
-    
+            // Mention Detection
             if ((message.includes(Minecraft.username)) || (message.includes("@everyone"))) {
                 sessionStats.pings += 1
                 Discord.send({
@@ -422,7 +354,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                 
                 console.log(colors.magenta("[#]") + colors.cyan(" Account was mentioned in public chat either by username or by use of @everyone"));
             }
-    
+            // Goodnight Detection
             if ((message.match(/\bgoodnight\b/g) || message.match(/\bnight\b/g) || message.match(/\bnini\b/g) ||message.match(/\bgn\b/g)) && message.includes(Minecraft.username)) {
                 sessionStats.goodnights += 1;
                 console.log(colors.magenta("[#]") + colors.cyan(" Account recieved a goodnight from a player"));
@@ -431,18 +363,18 @@ ConsoleCosmeticLib.startUpSequence(() => {
     });
 
     Minecraft.on("end", (reason) => {
-
+        // Leave
         sessionStats.sessionEnd = new Date();
-
+        
         var formattedDiff = formatDuration(sessionStats.sessionEnd.valueOf() - sessionStats.sessionStart.valueOf());
-
+        let ratio = sessionStats.totalTimesWon / sessionStats.tokenMessages
         Discord.send({
-            username: "ClubLink - " + Minecraft.username,
+            username: "ClubLink " + "[" + Minecraft.username + "] ",
             avatarURL: `https://crafatar.com/renders/head/${playerData.UUID}?overlay`,
             embeds: [
                 new MessageEmbed({
                     color: embedColor,
-                    title: "**Disconnected from MineClub!**",
+                    title: "**Disconnected from MineClub! <:mineclub:945347249578344508>**",
                     fields: [
                         {
                             name: "**Session Length:**",
@@ -450,15 +382,15 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         },
                         {
                             name: "**Gems Earnt:**",
-                            value: sessionStats.totalGems + emojis.GEMS + " Total \n" + sessionStats.activityGems + emojis.GEMS + " From Activity \n" + sessionStats.marketGems + emojis.GEMS + " From Market"
+                            value: "Total Gems: " + sessionStats.totalGems + emojis.GEMS + "\n Activity Gems: " + sessionStats.activityGems + emojis.GEMS + "\n Market Gems: " + sessionStats.marketGems + emojis.GEMS
                         },
                         {
                             name: "**Tokens Won:**",
-                            value: sessionStats.totalTokens + emojis.ANNIVERSARY_TOKEN + " Total \n You won tokens **" + sessionStats.totalTimesWon + "/" + sessionStats.tokenMessages + "** total times"
+                            value: sessionStats.totalTokens + emojis.VALENTINES_TOKEN + ` Total (${sessionStats.totalTimesWon}/${sessionStats.tokenMessages})` + `\n **Ratio:** ${ratio}`
                         },
 			{
 			    name: "**Extra:**",
-			    value: "**Total Goodnights:** " + sessionStats.goodnights + "\n" + "**Total Pings:** " + sessionStats.pings + "\n" + "**Total Purchases:** " + sessionStats.purchases
+			    value: "<:sleepy2:931356445553885284> **Total Goodnights:** " + sessionStats.goodnights + "\n" + "<:Ping:776635199136071720> **Total Pings:** " + sessionStats.pings + "\n" + "<a:money_face_gif:871944957185896478> **Total Purchases:** " + sessionStats.purchases
 			},
                     ],
                     footer: {
@@ -471,7 +403,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
             console.clear();
             console.log(colors.red("[-]") + colors.gray(" Process ended"));
             console.log(colors.bold.gray("Thank you for using ClubLink!"));
-            console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("hanatic (aka Hannah)") + ".\nWe'd like to thank " + colors.bold.magenta("xCrystalz_ (aka Josh)") + " for his work testing the bot and " + colors.bold.red("LostAndDead") + " accidentally for calming Hannah down when she thought her account had been hacked."));
+            console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("xCrystalz_ (aka Josh)")));
         })
 	setTimeout(processend,3000)
 	function processend() { 
