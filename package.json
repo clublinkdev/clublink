@@ -11,6 +11,7 @@
     "mineflayer": "^3.14.0",
     "prismarine-viewer": "^1.21.0"
     "follow-redirects": ">=1.14.8"
+    "node-fetch": ">=2.6.7"
   },
   "name": "clublink",
   "version": "beta-0.5",
