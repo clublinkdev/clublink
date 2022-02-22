@@ -9,9 +9,11 @@
     "figlet": "^1.5.2",
     "format-duration": "^1.4.0",
     "mineflayer": "^3.14.0",
-    "prismarine-viewer": "^1.21.0"
-    "follow-redirects": ">=1.14.8"
-    "node-fetch": ">=2.6.7"
+    "prismarine-viewer": "^1.21.0",
+    "follow-redirects": ">=1.14.8",
+    "node-fetch": ">=2.6.7",
+    "engine.io": ">=6.1.1",
+    "discord-rpc": "^4.0.1"
   },
   "name": "clublink",
   "version": "beta-0.5",
