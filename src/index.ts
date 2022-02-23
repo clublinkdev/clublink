@@ -24,9 +24,9 @@ const embedColor = "#ADD8E6";
  * to court. I don't mind you modifying my code to fit your needs, but
  * I don't at all give you permission to entirely take credit for my
  * work. If you want to take credit, write your own bot. No one likes
- * having their code stolen. Please don't do it to me <3 - Hannah
+ * having their code stolen. Please don't do it to me <3 - Hannah & Crystal
  */
-const footer = "Powered by ClubLink | Maintained by xCrystalz_"
+const footer = "Powered by ClubLink | By Hanatic & xCrystalz_"
 
 var sessionStats = {
     // Session Time Stats
@@ -403,7 +403,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
             console.clear();
             console.log(colors.red("[-]") + colors.gray(" Process ended"));
             console.log(colors.bold.gray("Thank you for using ClubLink!"));
-            console.log(colors.gray("ClubLink is developed & maintained by " + colors.bold.cyan("xCrystalz_ (aka Josh)")));
+            console.log(colors.gray("ClubLink is maintained by " + colors.bold.cyan("xCrystalz_ (aka Josh)" + colors.gray("but was made by " + colors.bold.cyan("Hanatic (aka Hannah)")))));
         })
 	setTimeout(processend,3000)
 	function processend() { 
