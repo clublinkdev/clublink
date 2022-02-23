@@ -4,8 +4,8 @@
 With ClubLink, you can track tokens and gems earnt while AFKing without even having to open Minecraft. More features coming soon! Built using Discord.JS, Mineflayer & Typescript.
 
 ### Dev Team
-- Hannah: Lead Developer (works on ClubLinker)
-- Josh: Developer & Discord Manager (works on ClubLink client)
+- Hannah: Lead Developer (not working anymore)
+- Josh: Maintainer
 
 ### Credit
 - TheMysterys for the original concept (https://github.com/TheMysterys/Mineclub-Link)
