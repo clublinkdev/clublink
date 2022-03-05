@@ -148,7 +148,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
 	} else if (input.startsWith("/tpa")) {
         console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
     } else if (input.startsWith("/tpahere")) {
-        console.log(colors.magenta("[*]") + colors.gray(" You cannot run this command! This violates TOS."));
+        console.log(colors.magenta("[*]") + colors.gray(" Sorry! You are not allowed to teleport (players to you, or you to a player) on a Console Client!"));
     } else if (input.startsWith("/joinadminevent")) {
         console.log(colors.magenta("[*]") + colors.gray(" Sorry! You are not allowed to join Admin Events on a Console Client!"));
 	} else if (input.startsWith("/")) {
@@ -210,7 +210,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         embeds: [
                             new MessageEmbed({
                                 color: embedColor,
-                                title: emojis.VALENTINES_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " VALENTINES TOKEN(S)!",
+                                title: emojis.LEPRECHAUN_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " LEPRECHAUN TOKEN(S)!",
                                 description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
                                 footer: {
                                     text: footer
@@ -230,7 +230,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         embeds: [
                             new MessageEmbed({
                                 color: embedColor,
-                                title: emojis.VALENTINES_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " VALENTINES TOKEN(S)!",
+                                title: emojis.LEPRECHAUN_TOKEN + " YOU WON " + Number.parseInt(message.replace(/[^0-9]+/g, "")) + " LEPRECHAUN TOKEN(S)!",
                                 description: `You've now won ${sessionStats.totalTimesWon} times out of the ${sessionStats.tokenMessages} during this session! Now totalling: ${sessionStats.totalTokens}`,
                                 footer: {
                                     text: footer
@@ -274,7 +274,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         embeds: [
                             new MessageEmbed({
                                 color: embedColor,
-                                title: "STORE PURCHASE",
+                                title: "STORE PURCHASE 🛒",
                                 description: `There have now been ${sessionStats.purchases} during this session!`,
                                 footer: {
                                     text: footer
@@ -290,7 +290,7 @@ ConsoleCosmeticLib.startUpSequence(() => {
                         embeds: [
                             new MessageEmbed({
                                 color: embedColor,
-                                title: "STORE PURCHASE",
+                                title: "STORE PURCHASE 🛒",
                                 description: `There have now been ${sessionStats.purchases} during this session!`,
                                 footer: {
                                     text: footer
