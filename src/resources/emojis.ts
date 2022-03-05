@@ -1,6 +1,6 @@
 export default {
     MINECLUB_LOGO: "<:mineclub:827293117224976416>",
-    VALENTINES_TOKEN: "<:ValentinesToken:941455149447135272>",
+    LEPRECHAUN_TOKEN: "<:leprechauntoken:949392890738647141>",
     GEMS: "<:Gem_100:837390660952653844>"
 };
 
